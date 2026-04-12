@@ -1,26 +1,40 @@
 import streamlit as st
 import pickle
 import re
+import os
 
-# Load model and vectorizer
-model = pickle.load(open("model.pkl", "rb"))
-vectorizer = pickle.load(open("vectorizer.pkl", "rb"))
+# ---- LOAD MODEL SAFELY ----
+BASE_DIR = os.path.dirname(__file__)
 
-# Clean text
+model_path = os.path.join(BASE_DIR, "..", "model.pkl")
+vectorizer_path = os.path.join(BASE_DIR, "..", "vectorizer.pkl")
+
+model = pickle.load(open(model_path, "rb"))
+vectorizer = pickle.load(open(vectorizer_path, "rb"))
+
+# ---- TEXT CLEANING ----
 def clean_text(text):
     text = text.lower()
     text = re.sub(r"<.*?>", "", text)
     text = re.sub(r"[^a-zA-Z]", " ", text)
     return text
 
-st.set_page_config(page_title="AI Sentiment Analyzer", page_icon="🎬")
+# ---- PAGE CONFIG ----
+st.set_page_config(
+    page_title="AI Sentiment Analyzer",
+    page_icon="🎬",
+    layout="centered"
+)
 
+# ---- HEADER ----
 st.title("🎬 AI Sentiment Analyzer")
 st.caption("Analyze movie reviews using Machine Learning")
 
 st.markdown("---")
 
-# Example buttons
+# ---- EXAMPLES ----
+st.subheader("💡 Try an example")
+
 col1, col2 = st.columns(2)
 
 with col1:
@@ -31,19 +45,22 @@ with col2:
     if st.button("😞 Negative Example"):
         st.session_state["text"] = "This movie was terrible and a waste of time"
 
-# Input
+st.markdown("---")
+
+# ---- INPUT ----
 text = st.text_area(
     "✍️ Enter your review:",
     value=st.session_state.get("text", ""),
-    height=150
+    height=150,
+    placeholder="Type a movie review here..."
 )
 
-# Predict
+# ---- ANALYZE ----
 if st.button("🚀 Analyze Sentiment"):
     if text.strip() == "":
-        st.warning("Please enter some text")
+        st.warning("⚠️ Please enter some text")
     else:
-        with st.spinner("Analyzing..."):
+        with st.spinner("🔍 Analyzing sentiment..."):
             cleaned = clean_text(text)
             vec = vectorizer.transform([cleaned])
 
@@ -55,21 +72,26 @@ if st.button("🚀 Analyze Sentiment"):
 
             st.markdown("---")
 
+            # RESULT
             if sentiment == "positive":
                 st.success("😊 Positive Sentiment")
             else:
                 st.error("😞 Negative Sentiment")
 
-            st.subheader("📊 Confidence")
+            # CONFIDENCE
+            st.subheader("📊 Confidence Level")
             st.progress(float(confidence))
-            st.write(f"Confidence Score: {confidence:.2f}")
+            st.write(f"Confidence Score: **{confidence:.2f}**")
 
 st.markdown("---")
 
+# ---- MODEL INFO ----
 with st.expander("🧠 Model Details"):
     st.write("Model: Logistic Regression")
     st.write("Accuracy: 89%")
     st.write("Vectorization: TF-IDF")
 
 st.markdown("---")
-st.caption("Built by Akinda")
+
+# ---- FOOTER ----
+st.caption("Built by Akinda | Machine Learning Project")
