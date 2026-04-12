@@ -1,21 +1,26 @@
 import streamlit as st
-import requests
+import pickle
+import re
 
-st.set_page_config(
-    page_title="AI Sentiment Analyzer",
-    page_icon="🎬",
-    layout="centered"
-)
+# Load model and vectorizer
+model = pickle.load(open("model.pkl", "rb"))
+vectorizer = pickle.load(open("vectorizer.pkl", "rb"))
 
-# ---- HEADER ----
+# Clean text
+def clean_text(text):
+    text = text.lower()
+    text = re.sub(r"<.*?>", "", text)
+    text = re.sub(r"[^a-zA-Z]", " ", text)
+    return text
+
+st.set_page_config(page_title="AI Sentiment Analyzer", page_icon="🎬")
+
 st.title("🎬 AI Sentiment Analyzer")
 st.caption("Analyze movie reviews using Machine Learning")
 
 st.markdown("---")
 
-# ---- EXAMPLE BUTTONS ----
-st.subheader("💡 Try an example")
-
+# Example buttons
 col1, col2 = st.columns(2)
 
 with col1:
@@ -26,56 +31,45 @@ with col2:
     if st.button("😞 Negative Example"):
         st.session_state["text"] = "This movie was terrible and a waste of time"
 
-st.markdown("---")
-
-# ---- INPUT ----
+# Input
 text = st.text_area(
     "✍️ Enter your review:",
     value=st.session_state.get("text", ""),
-    height=150,
-    placeholder="Type a movie review here..."
+    height=150
 )
 
-# ---- ANALYZE BUTTON ----
+# Predict
 if st.button("🚀 Analyze Sentiment"):
     if text.strip() == "":
-        st.warning("⚠️ Please enter some text")
+        st.warning("Please enter some text")
     else:
-        try:
-            with st.spinner("🔍 Analyzing sentiment..."):
-                response = requests.post(
-                    "http://127.0.0.1:8000/predict",
-                    params={"text": text}
-                )
-                result = response.json()
+        with st.spinner("Analyzing..."):
+            cleaned = clean_text(text)
+            vec = vectorizer.transform([cleaned])
 
-            sentiment = result["prediction"]
-            confidence = result["confidence"]
+            pred = model.predict(vec)[0]
+            proba = model.predict_proba(vec)[0]
+            confidence = max(proba)
+
+            sentiment = "positive" if pred == 1 else "negative"
 
             st.markdown("---")
 
-            # ---- RESULT DISPLAY ----
             if sentiment == "positive":
                 st.success("😊 Positive Sentiment")
             else:
                 st.error("😞 Negative Sentiment")
 
-            # ---- CONFIDENCE BAR ----
-            st.subheader("📊 Confidence Level")
-            st.progress(confidence)
-            st.write(f"Confidence Score: **{confidence:.2f}**")
-
-        except:
-            st.error("❌ API not running. Please start FastAPI first.")
+            st.subheader("📊 Confidence")
+            st.progress(float(confidence))
+            st.write(f"Confidence Score: {confidence:.2f}")
 
 st.markdown("---")
 
-# ---- MODEL INFO ----
 with st.expander("🧠 Model Details"):
     st.write("Model: Logistic Regression")
     st.write("Accuracy: 89%")
     st.write("Vectorization: TF-IDF")
 
-# ---- FOOTER ----
 st.markdown("---")
-st.caption("Built by Akinda | Machine Learning Project")
+st.caption("Built by Akinda")
