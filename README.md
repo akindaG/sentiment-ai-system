@@ -137,6 +137,12 @@ docker run -p 8000:8000 sentiment-app
 
 
 * Streamlit Interface
+  <img width="1919" height="1027" alt="image" src="https://github.com/user-attachments/assets/0c6c6113-3d67-4ea0-a6b3-88f006cb44fc" />
+  <img width="1919" height="1024" alt="image" src="https://github.com/user-attachments/assets/b41d1ecb-c95a-43bc-9dc5-298301b9ebdb" />
+  <img width="1919" height="1032" alt="image" src="https://github.com/user-attachments/assets/f48654a5-5bb6-48d6-b7a2-d1e0abd8dcfc" />
+  
+
+
 
 ---
 
