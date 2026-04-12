@@ -1,18 +1,12 @@
 import streamlit as st
 import pickle
 import re
-import os
 
-# ---- LOAD MODEL SAFELY ----
-BASE_DIR = os.path.dirname(__file__)
+# ---- LOAD MODEL (FIXED PATH) ----
+model = pickle.load(open("app/model.pkl", "rb"))
+vectorizer = pickle.load(open("app/vectorizer.pkl", "rb"))
 
-model_path = os.path.join(BASE_DIR, "..", "model.pkl")
-vectorizer_path = os.path.join(BASE_DIR, "..", "vectorizer.pkl")
-
-model = pickle.load(open(model_path, "rb"))
-vectorizer = pickle.load(open(vectorizer_path, "rb"))
-
-# ---- TEXT CLEANING ----
+# ---- CLEAN TEXT ----
 def clean_text(text):
     text = text.lower()
     text = re.sub(r"<.*?>", "", text)
@@ -72,13 +66,11 @@ if st.button("🚀 Analyze Sentiment"):
 
             st.markdown("---")
 
-            # RESULT
             if sentiment == "positive":
                 st.success("😊 Positive Sentiment")
             else:
                 st.error("😞 Negative Sentiment")
 
-            # CONFIDENCE
             st.subheader("📊 Confidence Level")
             st.progress(float(confidence))
             st.write(f"Confidence Score: **{confidence:.2f}**")
