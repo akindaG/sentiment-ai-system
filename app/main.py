@@ -5,8 +5,8 @@ import re
 app = FastAPI()
 
 # Load model and vectorizer
-model = pickle.load(open("model.pkl", "rb"))
-vectorizer = pickle.load(open("vectorizer.pkl", "rb"))
+model = pickle.load(open("app/model.pkl", "rb"))
+vectorizer = pickle.load(open("app/vectorizer.pkl", "rb"))
 
 # Text cleaning (same as training)
 def clean_text(text):
