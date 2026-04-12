@@ -1,4 +1,5 @@
-# 🚀 AI-Powered Sentiment Analysis System
+# AI-Powered Customer Feedback Analysis System
+Designed to simulate real-world business use cases such as analyzing customer reviews, product feedback, and social media sentiment.
 
 ## 📌 Overview
 
@@ -45,8 +46,7 @@ This system automates sentiment classification by:
 
 ## 🏗️ System Architecture
 
-```
-User Input → API (FastAPI) → Preprocessing → Model → Prediction → Response
+User Input → Streamlit UI → FastAPI → ML Model → Prediction → Response
 ```
 
 ---
@@ -142,13 +142,12 @@ docker run -p 8000:8000 sentiment-app
     <img width="1919" height="1033" alt="image" src="https://github.com/user-attachments/assets/0fbf3eb8-5b55-44c2-ace1-3e5abaf74e82" />
     <img width="1919" height="1028" alt="image" src="https://github.com/user-attachments/assets/b8f78ad9-cc91-47a7-ad66-6538d5eedc03" />
     
-
-
-  
-
-
+---
+## 🌐 Live Demo
+[Click here to try the app](your-link)
 
 ---
+
 
 ## 📌 Future Improvements
 
@@ -168,6 +167,28 @@ docker run -p 8000:8000 sentiment-app
 * Containerized application using Docker
 
 ---
+## 🧠 Model Selection Rationale
+
+Logistic Regression was chosen due to:
+- Strong performance on text classification tasks
+- Efficient training and inference
+- Better F1-score compared to Naive Bayes
+
+TF-IDF was used for feature extraction because:
+- It captures word importance effectively
+- Works well with linear models
+
+---
+## 💼 Real-World Applications
+
+- Customer review analysis (e-commerce)
+- Social media sentiment tracking
+- Product feedback monitoring
+- Brand reputation analysis
+
+---
+
+
 
 ## 📎 Author
 
