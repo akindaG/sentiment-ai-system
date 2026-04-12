@@ -35,10 +35,11 @@ This system automates sentiment classification by:
 
 | Model               | Accuracy | F1 Score |
 | ------------------- | -------- | -------- |
-| Logistic Regression | ~88%     | ~0.87    |
-| Naive Bayes         | ~85%     | ~0.84    |
+| Logistic Regression | ~89%     | ~0.89    |
+| Naive Bayes         | ~85%     | ~0.85    |
 
 > Evaluation performed using Precision, Recall, and F1-score on test data.
+> Logistic Regression performed better and was selected for deployment.
 
 ---
 
